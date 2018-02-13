@@ -1,12 +1,13 @@
 import zipfile
 import os
 from urllib.request import urlretrieve
+from tqdm import tqdm
 
 
 #下载数据集并解压
 def data_download():
 	url="https://github.com/zygmuntz/goodbooks-10k/releases/download/v1.0/goodbooks-10k.zip"
-	save_path = './'
+	save_path = './goodbooks-10k.zip'
 	data_name = 'goodbooks-10k.zip'
 	if os.path.exists(save_path+data_name):
 		print('found {} data'.format(data_name))
