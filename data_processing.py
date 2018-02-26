@@ -35,10 +35,16 @@ def books_feature_processing(books_path, book_tags_path, tags_path):
 #	print(books.head())
 	book_regex = 'book_id|goodreads_book_id|best_book_id|authors|'+\
 		'original_title|ratings_count|ratings_1|ratings_2|ratings_3|ratings_4|ratings_5'
-	print(book_regex)
 	books = books.filter(regex=book_regex)
-	print(books.head())
-	
+#	print(books.head())
+	authors2int = {val:i for i, val in enumerate(books['authors'])}
+	books['authors'] = books['authors'].map(authors2int)
+#	print(books['authors'].head())
+
+	title2int = {val:i for i, val in enumerate(books['original_title'])}
+	books['original_title'] = books['original_title'].map(title2int)
+	ratings = (1 * books['ratings_1'] + 2 * books['ratings_2'] + 3 * books['ratings_3'] + 4 * books['ratings_4'] + 5 * books['ratings_5'])/books['ratings_count']
+	print(ratings.head())
 
 def user_feature_processing():
 	pass
