@@ -37,47 +37,25 @@ Here, each tag/shelf is given an ID, tags.csv translates tag IDs to names
 - tags: tag_id, tag_name
 - to_read: user_id, book_id
 
-
 ### 数据使用
 在数据集中，有很多title 。通过分析，我们使用如下titles as features
 1. book: author, original_title, tags
 2. user: user_id,
 3. rating: ratings
 
+### 关于数据的疑问！！！！！
+1. goodreads_book_id和best_book_id是什么
+2. ratings_count 和 work_ratings_count有什么区别
+
+
+
+
 ## 数据处理
 首先将无用的数据title过滤，然后将各个表通过外键连接起来。
 #### book_processing函数
 传入所有和book相关的数据，输出book特征处理后的数据
 1. 过滤books表，保留：book_id|goodreads_book_id|best_book_id|authors|original_title|ratings_count|ratings_1|ratings_2|ratings_3|ratings_4|ratings_5
-2. 对author和original_title作word2int，转换为int便于之后的embedding
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	1. 考虑到best_book_id 等于 goodreads_book_id并且后者只在后期合并表时有意义，所以删掉best_book_id
+	2. 对author和original_title作word2int，转换为int便于之后的embedding
+	3. 记录每个书籍的平均得分0～5
+2. 将book表和book_tags表合并，得到带有书籍风格标签的表
