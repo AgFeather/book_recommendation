@@ -47,15 +47,26 @@ Here, each tag/shelf is given an ID, tags.csv translates tag IDs to names
 1. goodreads_book_id和best_book_id是什么
 2. ratings_count 和 work_ratings_count有什么区别
 
+## 数据下载和解压 data_download.py
 
 
-
-## 数据处理
+## 数据处理 data_processing.py
 首先将无用的数据title过滤，然后将各个表通过外键连接起来。
+一共有三个实体：1 book，2 reader，3 rating
+1. book保留特征：book_id, title, authors, Tags
+2. user保留特征：user_id
+3. rating为user对书籍的评分，作为监督学习最后的标签。 同时，考虑到有to_read表，表示user想读的书籍，该特征也可以作为标签的一种更好的结合到一起。
 #### book_processing函数
 传入所有和book相关的数据，输出book特征处理后的数据
 1. 过滤books表，保留：book_id|goodreads_book_id|best_book_id|authors|original_title|ratings_count|ratings_1|ratings_2|ratings_3|ratings_4|ratings_5
 	1. 考虑到best_book_id 等于 goodreads_book_id并且后者只在后期合并表时有意义，所以删掉best_book_id
 	2. 对author和original_title作word2int，转换为int便于之后的embedding
 	3. 记录每个书籍的平均得分0～5
-2. 将book表和book_tags表合并，得到带有书籍风格标签的表
+2. 将book表和book_tags表合并，得到带有书籍风格标签的表（暂时将tag表保留，不进行表合并）
+3. 将books, authors2int, title2int, book_tags, tags，保存为 book_params.p文件
+4. 其中books的格式为：[book_id:int, goodreads_book_id:int, authors:int, original_title:int, ratings_1:int]
+
+
+
+## 书籍特征处理 book_feature_processing.py
+使用tensorflow对书籍相关的所有特征进行表示

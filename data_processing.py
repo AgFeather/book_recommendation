@@ -1,8 +1,18 @@
 import os
 import pandas as pd
+import pickle
 
 
-def data_load():
+
+data_path = './data/'
+books_path = data_path+'books.csv'
+book_tags_path = data_path+'book_tags.csv'
+tags_path = data_path+'tags.csv'
+to_read_path = data_path+'to_read.csv'
+ratings_path = data_path+'ratings.csv'
+
+
+def label_data_load():
 	'''
 	load data from csv files
 	
@@ -16,21 +26,16 @@ def data_load():
 	to_read: user_id, book_id
 	'''
 
-	data_path = './data/'
-	books_path = data_path+'books.csv'
-	book_tags_path = data_path+'book_tags.csv'
-	tags_path = data_path+'tags.csv'
-	# book_tags = pd.read_csv(data_path + 'book_tags.csv')
-	# books = pd.read_csv(data_path + 'books.csv')
-	# ratings = pd.read_csv(data_path + 'ratings.csv')
-	# tags = pd.read_csv(data_path + 'tags.csv')
-	# to_read = pd.read_csv(data_path + 'to_read.csv')
-	books = books_feature_processing(books_path, book_tags_path, tags_path)
+	to_read = pd.read_csv(to_read_path)
+	ratings = pd.read_csv(ratings_path)
+	return to_read, ratings
 
 
 
-def books_feature_processing(books_path, book_tags_path, tags_path):
+def books_params_processing(books_path, book_tags_path, tags_path):
 	books = pd.read_csv(books_path)
+	book_tags = pd.read_csv(book_tags_path)
+	tags = pd.read_csv(tags_path)
 	book_items = ['book_id','goodreads_book_id','authors',
 		'original_title','ratings_count','ratings_1','ratings_2','ratings_3','ratings_4','ratings_5']
 #	book_regex = 'book_id|goodreads_book_id|authors|'+\
@@ -54,24 +59,23 @@ def books_feature_processing(books_path, book_tags_path, tags_path):
 	del books['ratings_count']
 
 #	books = pd.concat([books, ratings], axis=1)
-#	print(books.head())
+	print(books.head())
 
 
 	'''
 	将book表和book_tags表合并，得到带有书籍风格标签的表
 	'''
-	books_tags = pd.read_csv(book_tags_path)
-	print(books_tags.head())
+#	books_tags = pd.read_csv(book_tags_path)
+#	print(books_tags.head())
 
 
+	pickle.dump((books, authors2int, title2int, book_tags, tags), 
+				open('book_params.p', 'wb'))
 
-	return books
+	return books, authors2int, title2int
 
 
-
-def user_feature_processing():
-	pass
 
 
 if __name__ == '__main__':
-	data_load()
+	books_params_processing(books_path, book_tags_path, tags_path)
