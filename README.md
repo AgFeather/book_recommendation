@@ -70,3 +70,6 @@ Here, each tag/shelf is given an ID, tags.csv translates tag IDs to names
 
 ## 书籍特征处理 book_feature_processing.py
 使用tensorflow对书籍相关的所有特征进行表示
+
+
+## 用户特征处理 user_feature_processing.py
